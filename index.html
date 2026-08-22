@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SparkBoard – Spark Your Ideas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #faf9f7;
+      --surface: #ffffff;
+      --text: #1a1a1a;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+      --accent: #f59e0b;
+      --shadow: 0 4px 12px rgba(0,0,0,0.06);
+      --shadow-hover: 0 8px 24px rgba(0,0,0,0.1);
+      --radius: 12px;
+      --transition: 180ms ease;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+    /* Header */
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+    .logo {
+      font-weight: 700;
+      font-size: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+    .logo span { color: var(--accent); }
+    .search-wrap {
+      flex: 1;
+      max-width: 420px;
+      position: relative;
+    }
+    .search-wrap input {
+      width: 100%;
+      padding: 8px 12px 8px 36px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      background: var(--bg);
+      transition: border var(--transition);
+    }
+    .search-wrap input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(245,158,11,0.15);
+    }
+    .search-icon {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      pointer-events: none;
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-left: auto;
+    }
+    button {
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      border-radius: 8px;
+      font-weight: 500;
+      transition: all var(--transition);
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-primary:hover { background: #d97706; transform: translateY(-1px); }
+    .btn-ghost {
+      background: transparent;
+      color: var(--muted);
+      padding: 8px 12px;
+    }
+    .btn-ghost:hover { background: #f3f4f6; color: var(--text); }
+    .btn-sm { padding: 6px 10px; font-size: 0.85rem; }
+    /* Filters */
+    .filters {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      padding: 12px 24px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+    .filter-chip {
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      background: #f3f4f6;
+      color: var(--muted);
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+    .filter-chip.active {
+      background: #fef3c7;
+      color: #92400e;
+      border-color: #fcd34d;
+    }
+    .filter-chip:hover { background: #e5e7eb; }
+    /* Board */
+    .board {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(260px, 1fr));
+      gap: 16px;
+      padding: 20px 24px;
+      overflow-x: auto;
+      min-height: calc(100vh - 140px);
+    }
+    .column {
+      background: #f3f4f6;
+      border-radius: var(--radius);
+      display: flex;
+      flex-direction: column;
+      min-height: 400px;
+      transition: background var(--transition);
+    }
+    .column.drag-over {
+      background: #e0e7ff;
+      outline: 2px dashed #6366f1;
+    }
+    .column-header {
+      padding: 14px 16px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .column-count {
+      background: white;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .column-body {
+      flex: 1;
+      padding: 0 12px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 100px;
+    }
+    /* Card */
+    .card {
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 14px;
+      box-shadow: var(--shadow);
+      cursor: grab;
+      transition: all var(--transition);
+      border-left: 4px solid transparent;
+      position: relative;
+    }
+    .card:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-2px);
+    }
+    .card.dragging {
+      opacity: 0.6;
+      transform: scale(1.02);
+      cursor: grabbing;
+    }
+    .card-title {
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 6px;
+      word-break: break-word;
+    }
+    .card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 8px;
+    }
+    .tag {
+      font-size: 0.7rem;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: #f3f4f6;
+      color: var(--muted);
+    }
+    .card-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+    .checklist-progress {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    /* Colors */
+    .color-blue { border-left-color: #3b82f6; }
+    .color-green { border-left-color: #22c55e; }
+    .color-yellow { border-left-color: #eab308; }
+    .color-purple { border-left-color: #a855f7; }
+    .color-pink { border-left-color: #ec4899; }
+    .color-orange { border-left-color: #f97316; }
+    .color-gray { border-left-color: #6b7280; }
+    /* Empty state */
+    .empty-column {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      font-size: 0.85rem;
+      text-align: center;
+      padding: 24px;
+      border: 2px dashed #d1d5db;
+      border-radius: 8px;
+      margin: 0 4px;
+    }
+    .empty-column .emoji { font-size: 1.5rem; margin-bottom: 8px; }
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--transition);
+      padding: 16px;
+    }
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .modal {
+      background: var(--surface);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 520px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+      transform: translateY(12px) scale(0.98);
+      transition: transform var(--transition);
+    }
+    .modal-overlay.open .modal {
+      transform: translateY(0) scale(1);
+    }
+    .modal-header {
+      padding: 20px 24px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    .modal-header h2 {
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+    .modal-body {
+      padding: 0 24px 24px;
+    }
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .form-group input[type="text"],
+    .form-group textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      transition: border var(--transition);
+    }
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(245,158,11,0.15);
+    }
+    .form-group textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+    .color-picker {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .color-swatch {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: transform var(--transition);
+    }
+    .color-swatch:hover { transform: scale(1.1); }
+    .color-swatch.selected { border-color: var(--text); box-shadow: 0 0 0 2px white, 0 0 0 4px currentColor; }
+    .color-swatch.blue { background: #3b82f6; }
+    .color-swatch.green { background: #22c55e; }
+    .color-swatch.yellow { background: #eab308; }
+    .color-swatch.purple { background: #a855f7; }
+    .color-swatch.pink { background: #ec4899; }
+    .color-swatch.orange { background: #f97316; }
+    .color-swatch.gray { background: #6b7280; }
+    .tags-input-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 8px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      min-height: 42px;
+      align-items: center;
+    }
+    .tags-input-wrap input {
+      border: none !important;
+      outline: none;
+      flex: 1;
+      min-width: 80px;
+      padding: 4px !important;
+      box-shadow: none !important;
+    }
+    .tag-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: #fef3c7;
+      color: #92400e;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+    }
+    .tag-item button {
+      background: none;
+      border: none;
+      color: inherit;
+      cursor: pointer;
+      font-size: 1rem;
+      line-height: 1;
+      padding: 0;
+    }
+    .checklist {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .checklist-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .checklist-item input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+    .checklist-item input[type="text"] {
+      flex: 1;
+      border: none;
+      border-bottom: 1px solid transparent;
+      padding: 4px 0;
+      font-size: 0.9rem;
+    }
+    .checklist-item input[type="text"]:focus {
+      outline: none;
+      border-bottom-color: var(--border);
+    }
+    .checklist-item.done span, .checklist-item.done input[type="text"] {
+      text-decoration: line-through;
+      color: var(--muted);
+    }
+    .add-check-btn {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 0.85rem;
+      background: none;
+      padding: 4px 0;
+    }
+    .add-check-btn:hover { color: var(--accent); }
+    .modal-footer {
+      padding: 16px 24px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .btn-danger {
+      background: #fef2f2;
+      color: #dc2626;
+      padding: 8px 14px;
+    }
+    .btn-danger:hover { background: #fee2e2; }
+    .btn-secondary {
+      background: #f3f4f6;
+      color: var(--text);
+      padding: 8px 14px;
+    }
+    .btn-secondary:hover { background: #e5e7eb; }
+    .created-date {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 8px;
+    }
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #1a1a1a;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: all var(--transition);
+      z-index: 200;
+      pointer-events: none;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    /* Responsive */
+    @media (max-width: 900px) {
+      .board {
+        grid-template-columns: repeat(4, minmax(240px, 1fr));
+      }
+      header { flex-wrap: wrap; gap: 10px; }
+      .search-wrap { order: 3; max-width: 100%; width: 100%; }
+    }
+    @media (max-width: 600px) {
+      .board {
+        grid-template-columns: 1fr;
+        padding: 12px;
+      }
+      .column { min-height: 200px; }
+      header { padding: 10px 12px; }
+    }
+    /* Dropdown for export */
+    .dropdown {
+      position: relative;
+    }
+    .dropdown-menu {
+      position: absolute;
+      right: 0;
+      top: 100%;
+      margin-top: 4px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      box-shadow: var(--shadow-hover);
+      min-width: 160px;
+      display: none;
+      z-index: 60;
+      overflow: hidden;
+    }
+    .dropdown.open .dropdown-menu { display: block; }
+    .dropdown-menu button {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 10px 14px;
+      background: none;
+      border: none;
+      font-size: 0.9rem;
+      color: var(--text);
+    }
+    .dropdown-menu button:hover { background: #f3f4f6; }
+    .kbd {
+      font-size: 0.7rem;
+      background: #f3f4f6;
+      padding: 2px 5px;
+      border-radius: 4px;
+      color: var(--muted);
+      margin-left: 6px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">✨ <span>Spark</span>Board</div>
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="Search ideas, tags, notes..." aria-label="Search">
+    </div>
+    <div class="header-actions">
+      <div class="dropdown" id="exportDropdown">
+        <button class="btn-ghost btn-sm" onclick="toggleExport()">Export ▾</button>
+        <div class="dropdown-menu">
+          <button onclick="exportJSON()">Export as JSON</button>
+          <button onclick="exportMarkdown()">Export as Markdown</button>
+        </div>
+      </div>
+      <button class="btn-primary" onclick="openModal()">+ New Idea <span class="kbd">N</span></button>
+    </div>
+  </header>
+
+  <div class="filters" id="filtersBar">
+    <button class="filter-chip active" data-filter="all" onclick="setFilter('all')">All</button>
+    <button class="filter-chip" data-filter="blue" onclick="setFilter('blue')">Blue</button>
+    <button class="filter-chip" data-filter="green" onclick="setFilter('green')">Green</button>
+    <button class="filter-chip" data-filter="yellow" onclick="setFilter('yellow')">Yellow</button>
+    <button class="filter-chip" data-filter="purple" onclick="setFilter('purple')">Purple</button>
+    <button class="filter-chip" data-filter="pink" onclick="setFilter('pink')">Pink</button>
+    <button class="filter-chip" data-filter="orange" onclick="setFilter('orange')">Orange</button>
+    <span style="width:1px;background:var(--border);margin:0 4px;"></span>
+    <div id="tagFilters"></div>
+  </div>
+
+  <div class="board" id="board"></div>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modalOverlay" onclick="handleOverlayClick(event)">
+    <div class="modal" role="dialog" aria-modal="true">
+      <div class="modal-header">
+        <h2 id="modalTitle">New Idea</h2>
+        <button class="btn-ghost" onclick="closeModal()" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="ideaTitle">Title</label>
+          <input type="text" id="ideaTitle" placeholder="What’s the spark?" maxlength="120">
+        </div>
+        <div class="form-group">
+          <label>Color</label>
+          <div class="color-picker" id="colorPicker">
+            <div class="color-swatch blue selected" data-color="blue" onclick="selectColor('blue')"></div>
+            <div class="color-swatch green" data-color="green" onclick="selectColor('green')"></div>
+            <div class="color-swatch yellow" data-color="yellow" onclick="selectColor('yellow')"></div>
+            <div class="color-swatch purple" data-color="purple" onclick="selectColor('purple')"></div>
+            <div class="color-swatch pink" data-color="pink" onclick="selectColor('pink')"></div>
+            <div class="color-swatch orange" data-color="orange" onclick="selectColor('orange')"></div>
+            <div class="color-swatch gray" data-color="gray" onclick="selectColor('gray')"></div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Tags</label>
+          <div class="tags-input-wrap" id="tagsWrap">
+            <input type="text" id="tagInput" placeholder="Add tag + Enter" onkeydown="handleTagKey(event)">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="ideaNotes">Notes</label>
+          <textarea id="ideaNotes" placeholder="Details, thoughts, context..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Checklist</label>
+          <div class="checklist" id="checklist"></div>
+          <button class="add-check-btn" onclick="addChecklistItem()">+ Add item</button>
+        </div>
+        <div class="created-date" id="createdDate"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-danger" id="deleteBtn" onclick="deleteIdea()" style="display:none">Delete</button>
+        <div style="display:flex;gap:8px;margin-left:auto">
+          <button class="btn-secondary" onclick="closeModal()">Cancel</button>
+          <button class="btn-primary" onclick="saveIdea()">Save Idea</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // ===== Data & State =====
+    const STAGES = [
+      { id: 'inbox', label: 'Inbox', emoji: '📬' },
+      { id: 'exploring', label: 'Exploring', emoji: '🔍' },
+      { id: 'building', label: 'Building', emoji: '🛠️' },
+      { id: 'done', label: 'Done', emoji: '✅' }
+    ];
+    const COLORS = ['blue', 'green', 'yellow', 'purple', 'pink', 'orange', 'gray'];
+    const STORAGE_KEY = 'sparkboard-data-v1';
+
+    let ideas = [];
+    let currentFilter = 'all';
+    let currentTagFilter = null;
+    let searchQuery = '';
+    let editingId = null;
+    let selectedColor = 'blue';
+    let currentTags = [];
+    let currentChecklist = [];
+
+    // ===== Persistence =====
+    function loadData() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          ideas = Array.isArray(parsed.ideas) ? parsed.ideas : [];
+        }
+      } catch (e) {
+        console.warn('Failed to load data', e);
+        ideas = [];
+      }
+    }
+
+    function saveData() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({ ideas, version: 1 }));
+      } catch (e) {
+        showToast('Could not save – storage full?');
+      }
+    }
+
+    // ===== Utils =====
+    function uid() {
+      return crypto.randomUUID ? crypto.randomUUID() : 'id-' + Date.now() + '-' + Math.random().toString(36).slice(2, 9);
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2200);
+    }
+
+    function formatDate(iso) {
+      if (!iso) return '';
+      const d = new Date(iso);
+      return d.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+    }
+
+    // ===== Rendering =====
+    function render() {
+      const board = document.getElementById('board');
+      board.innerHTML = '';
+
+      const filtered = getFilteredIdeas();
+
+      STAGES.forEach(stage => {
+        const col = document.createElement('div');
+        col.className = 'column';
+        col.dataset.stage = stage.id;
+        col.addEventListener('dragover', handleDragOver);
+        col.addEventListener('dragleave', handleDragLeave);
+        col.addEventListener('drop', handleDrop);
+
+        const stageIdeas = filtered.filter(i => i.stage === stage.id);
+
+        col.innerHTML = `
+          <div class="column-header">
+            <span>${stage.emoji} ${stage.label}</span>
+            <span class="column-count">${stageIdeas.length}</span>
+          </div>
+          <div class="column-body" data-stage="${stage.id}"></div>
+        `;
+
+        const body = col.querySelector('.column-body');
+
+        if (stageIdeas.length === 0) {
+          body.innerHTML = `
+            <div class="empty-column">
+              <div class="emoji">✨</div>
+              <div>No sparks yet</div>
+              <div style="font-size:0.75rem;margin-top:4px">Drag here or hit N</div>
+            </div>
+          `;
+        } else {
+          stageIdeas.forEach(idea => {
+            body.appendChild(createCardElement(idea));
+          });
+        }
+
+        board.appendChild(col);
+      });
+
+      renderTagFilters();
+    }
+
+    function createCardElement(idea) {
+      const card = document.createElement('div');
+      card.className = `card color-${idea.color || 'blue'}`;
+      card.draggable = true;
+      card.dataset.id = idea.id;
+      card.addEventListener('dragstart', handleDragStart);
+      card.addEventListener('dragend', handleDragEnd);
+      card.addEventListener('click', () => openModal(idea.id));
+
+      const doneCount = (idea.checklist || []).filter(c => c.done).length;
+      const totalCheck = (idea.checklist || []).length;
+
+      card.innerHTML = `
+        <div class="card-title">${escapeHtml(idea.title || 'Untitled')}</div>
+        ${idea.tags && idea.tags.length ? `<div class="card-tags">${idea.tags.map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('')}</div>` : ''}
+        <div class="card-meta">
+          <span>${formatDate(idea.createdAt)}</span>
+          ${totalCheck ? `<span class="checklist-progress">☑ ${doneCount}/${totalCheck}</span>` : ''}
+        </div>
+      `;
+      return card;
+    }
+
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    function getFilteredIdeas() {
+      return ideas.filter(idea => {
+        // color / all filter
+        if (currentFilter !== 'all' && idea.color !== currentFilter) return false;
+        // tag filter
+        if (currentTagFilter && !(idea.tags || []).includes(currentTagFilter)) return false;
+        // search
+        if (searchQuery) {
+          const q = searchQuery.toLowerCase();
+          const inTitle = (idea.title || '').toLowerCase().includes(q);
+          const inNotes = (idea.notes || '').toLowerCase().includes(q);
+          const inTags = (idea.tags || []).some(t => t.toLowerCase().includes(q));
+          if (!inTitle && !inNotes && !inTags) return false;
+        }
+        return true;
+      });
+    }
+
+    function renderTagFilters() {
+      const allTags = [...new Set(ideas.flatMap(i => i.tags || []))].sort();
+      const container = document.getElementById('tagFilters');
+      container.innerHTML = allTags.map(tag => `
+        <button class="filter-chip ${currentTagFilter === tag ? 'active' : ''}" onclick="setTagFilter('${escapeHtml(tag)}')">#${escapeHtml(tag)}</button>
+      `).join('');
+    }
+
+    // ===== Filters =====
+    function setFilter(f) {
+      currentFilter = f;
+      document.querySelectorAll('.filter-chip[data-filter]').forEach(el => {
+        el.classList.toggle('active', el.dataset.filter === f);
+      });
+      render();
+    }
+
+    function setTagFilter(tag) {
+      currentTagFilter = currentTagFilter === tag ? null : tag;
+      render();
+    }
+
+    // ===== Drag & Drop =====
+    let draggedId = null;
+
+    function handleDragStart(e) {
+      draggedId = e.target.dataset.id;
+      e.target.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', draggedId);
+    }
+
+    function handleDragEnd(e) {
+      e.target.classList.remove('dragging');
+      document.querySelectorAll('.column').forEach(c => c.classList.remove('drag-over'));
+      draggedId = null;
+    }
+
+    function handleDragOver(e) {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      const col = e.currentTarget;
+      col.classList.add('drag-over');
+    }
+
+    function handleDragLeave(e) {
+      e.currentTarget.classList.remove('drag-over');
+    }
+
+    function handleDrop(e) {
+      e.preventDefault();
+      const col = e.currentTarget;
+      col.classList.remove('drag-over');
+      const stage = col.dataset.stage;
+      const id = e.dataTransfer.getData('text/plain') || draggedId;
+      if (!id || !stage) return;
+
+      const idea = ideas.find(i => i.id === id);
+      if (idea && idea.stage !== stage) {
+        idea.stage = stage;
+        idea.updatedAt = new Date().toISOString();
+        saveData();
+        render();
+        showToast(`Moved to ${STAGES.find(s => s.id === stage).label}`);
+      }
+    }
+
+    // ===== Modal =====
+    function openModal(id = null) {
+      editingId = id;
+      const overlay = document.getElementById('modalOverlay');
+      const titleEl = document.getElementById('modalTitle');
+      const deleteBtn = document.getElementById('deleteBtn');
+
+      if (id) {
+        const idea = ideas.find(i => i.id === id);
+        if (!idea) return;
+        titleEl.textContent = 'Edit Idea';
+        document.getElementById('ideaTitle').value = idea.title || '';
+        document.getElementById('ideaNotes').value = idea.notes || '';
+        selectedColor = idea.color || 'blue';
+        currentTags = [...(idea.tags || [])];
+        currentChecklist = (idea.checklist || []).map(c => ({ ...c }));
+        document.getElementById('createdDate').textContent = `Created ${formatDate(idea.createdAt)}`;
+        deleteBtn.style.display = 'block';
+      } else {
+        titleEl.textContent = 'New Idea';
+        document.getElementById('ideaTitle').value = '';
+        document.getElementById('ideaNotes').value = '';
+        selectedColor = 'blue';
+        currentTags = [];
+        currentChecklist = [];
+        document.getElementById('createdDate').textContent = '';
+        deleteBtn.style.display = 'none';
+      }
+
+      updateColorUI();
+      renderTags();
+      renderChecklist();
+      overlay.classList.add('open');
+      setTimeout(() => document.getElementById('ideaTitle').focus(), 50);
+    }
+
+    function closeModal() {
+      document.getElementById('modalOverlay').classList.remove('open');
+      editingId = null;
+    }
+
+    function handleOverlayClick(e) {
+      if (e.target === document.getElementById('modalOverlay')) closeModal();
+    }
+
+    function selectColor(c) {
+      selectedColor = c;
+      updateColorUI();
+    }
+
+    function updateColorUI() {
+      document.querySelectorAll('.color-swatch').forEach(el => {
+        el.classList.toggle('selected', el.dataset.color === selectedColor);
+      });
+    }
+
+    function renderTags() {
+      const wrap = document.getElementById('tagsWrap');
+      const input = document.getElementById('tagInput');
+      // clear existing tags
+      wrap.querySelectorAll('.tag-item').forEach(t => t.remove());
+      currentTags.forEach(tag => {
+        const span = document.createElement('span');
+        span.className = 'tag-item';
+        span.innerHTML = `${escapeHtml(tag)} <button type="button" onclick="removeTag('${escapeHtml(tag)}')">×</button>`;
+        wrap.insertBefore(span, input);
+      });
+    }
+
+    function handleTagKey(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        const val = e.target.value.trim().toLowerCase();
+        if (val && !currentTags.includes(val)) {
+          currentTags.push(val);
+          renderTags();
+        }
+        e.target.value = '';
+      }
+    }
+
+    function removeTag(tag) {
+      currentTags = currentTags.filter(t => t !== tag);
+      renderTags();
+    }
+
+    function renderChecklist() {
+      const container = document.getElementById('checklist');
+      container.innerHTML = currentChecklist.map((item, idx) => `
+        <div class="checklist-item ${item.done ? 'done' : ''}">
+          <input type="checkbox" ${item.done ? 'checked' : ''} onchange="toggleCheck(${idx})">
+          <input type="text" value="${escapeHtml(item.text)}" oninput="updateCheckText(${idx}, this.value)" placeholder="Checklist item">
+          <button class="btn-ghost btn-sm" onclick="removeCheck(${idx})" style="padding:2px 6px">×</button>
+        </div>
+      `).join('');
+    }
+
+    function addChecklistItem() {
+      currentChecklist.push({ id: uid(), text: '', done: false });
+      renderChecklist();
+      // focus last input
+      const inputs = document.querySelectorAll('#checklist input[type="text"]');
+      if (inputs.length) inputs[inputs.length - 1].focus();
+    }
+
+    function toggleCheck(idx) {
+      currentChecklist[idx].done = !currentChecklist[idx].done;
+      renderChecklist();
+    }
+
+    function updateCheckText(idx, val) {
+      currentChecklist[idx].text = val;
+    }
+
+    function removeCheck(idx) {
+      currentChecklist.splice(idx, 1);
+      renderChecklist();
+    }
+
+    function saveIdea() {
+      const title = document.getElementById('ideaTitle').value.trim();
+      if (!title) {
+        showToast('Title is required');
+        document.getElementById('ideaTitle').focus();
+        return;
+      }
+
+      const notes = document.getElementById('ideaNotes').value.trim();
+      const now = new Date().toISOString();
+
+      if (editingId) {
+        const idea = ideas.find(i => i.id === editingId);
+        if (idea) {
+          idea.title = title;
+          idea.notes = notes;
+          idea.color = selectedColor;
+          idea.tags = [...currentTags];
+          idea.checklist = currentChecklist.filter(c => c.text.trim()).map(c => ({ ...c }));
+          idea.updatedAt = now;
+        }
+        showToast('Idea updated');
+      } else {
+        ideas.unshift({
+          id: uid(),
+          title,
+          notes,
+          color: selectedColor,
+          tags: [...currentTags],
+          checklist: currentChecklist.filter(c => c.text.trim()).map(c => ({ ...c })),
+          stage: 'inbox',
+          createdAt: now,
+          updatedAt: now
+        });
+        showToast('Idea created ✨');
+      }
+
+      saveData();
+      closeModal();
+      render();
+    }
+
+    function deleteIdea() {
+      if (!editingId) return;
+      if (!confirm('Delete this idea permanently?')) return;
+      ideas = ideas.filter(i => i.id !== editingId);
+      saveData();
+      closeModal();
+      render();
+      showToast('Idea deleted');
+    }
+
+    // ===== Export =====
+    function toggleExport() {
+      document.getElementById('exportDropdown').classList.toggle('open');
+    }
+
+    document.addEventListener('click', (e) => {
+      const dd = document.getElementById('exportDropdown');
+      if (!dd.contains(e.target)) dd.classList.remove('open');
+    });
+
+    function exportJSON() {
+      const data = JSON.stringify({ ideas, exportedAt: new Date().toISOString() }, null, 2);
+      downloadFile(data, 'sparkboard-export.json', 'application/json');
+      showToast('JSON exported');
+      document.getElementById('exportDropdown').classList.remove('open');
+    }
+
+    function exportMarkdown() {
+      let md = `# SparkBoard Export\n\nExported: ${new Date().toLocaleString()}\n\n`;
+      STAGES.forEach(stage => {
+        const stageIdeas = ideas.filter(i => i.stage === stage.id);
+        md += `## ${stage.emoji} ${stage.label} (${stageIdeas.length})\n\n`;
+        if (stageIdeas.length === 0) {
+          md += '_No ideas_\n\n';
+          return;
+        }
+        stageIdeas.forEach(idea => {
+          md += `### ${idea.title}\n`;
+          md += `- **Color**: ${idea.color}\n`;
+          if (idea.tags && idea.tags.length) md += `- **Tags**: ${idea.tags.join(', ')}\n`;
+          md += `- **Created**: ${formatDate(idea.createdAt)}\n`;
+          if (idea.notes) md += `\n${idea.notes}\n`;
+          if (idea.checklist && idea.checklist.length) {
+            md += `\n**Checklist:**\n`;
+            idea.checklist.forEach(c => {
+              md += `- [${c.done ? 'x' : ' '}] ${c.text}\n`;
+            });
+          }
+          md += '\n---\n\n';
+        });
+      });
+      downloadFile(md, 'sparkboard-export.md', 'text/markdown');
+      showToast('Markdown exported');
+      document.getElementById('exportDropdown').classList.remove('open');
+    }
+
+    function downloadFile(content, filename, type) {
+      const blob = new Blob([content], { type });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    // ===== Keyboard =====
+    document.addEventListener('keydown', (e) => {
+      // Quick add: N or Ctrl/Cmd+K when not in input
+      const inInput = ['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName);
+      if ((e.key === 'n' || e.key === 'N') && !inInput && !e.metaKey && !e.ctrlKey && !e.altKey) {
+        e.preventDefault();
+        openModal();
+      }
+      if ((e.key === 'k' || e.key === 'K') && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        openModal();
+      }
+      // Esc closes modal
+      if (e.key === 'Escape') {
+        closeModal();
+        document.getElementById('exportDropdown').classList.remove('open');
+      }
+      // Ctrl+Enter saves in modal
+      if ((e.metaKey || e.ctrlKey) && e.key === 'Enter' && document.getElementById('modalOverlay').classList.contains('open')) {
+        e.preventDefault();
+        saveIdea();
+      }
+    });
+
+    // Search live
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+      searchQuery = e.target.value.trim();
+      render();
+    });
+
+    // ===== Init =====
+    loadData();
+    render();
+
+    // Seed example if empty (first run delight)
+    if (ideas.length === 0) {
+      const now = new Date().toISOString();
+      ideas = [
+        {
+          id: uid(),
+          title: 'Welcome to SparkBoard ✨',
+          notes: 'This is your idea board. Create cards, drag them across stages, add tags, colors, notes and checklists.\n\nPress N or Ctrl+K anytime to add a new idea.\n\nEverything is saved locally in your browser.',
+          color: 'yellow',
+          tags: ['welcome', 'tips'],
+          checklist: [
+            { id: uid(), text: 'Create your first real idea', done: false },
+            { id: uid(), text: 'Drag this card to Exploring', done: false },
+            { id: uid(), text: 'Try exporting to Markdown', done: false }
+          ],
+          stage: 'inbox',
+          createdAt: now,
+          updatedAt: now
+        },
+        {
+          id: uid(),
+          title: 'Build something people love',
+          notes: 'Focus on delight and clarity.',
+          color: 'purple',
+          tags: ['product'],
+          checklist: [],
+          stage: 'exploring',
+          createdAt: now,
+          updatedAt: now
+        }
+      ];
+      saveData();
+      render();
+    }
+  </script>
+</body>
+</html>
