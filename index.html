@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SparkBoard – Spark Your Ideas</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SparkBoard ✨</title>
   <style>
     :root {
       --bg: #faf9f7;
@@ -14,197 +12,260 @@
       --muted: #6b7280;
       --border: #e5e7eb;
       --accent: #f59e0b;
-      --shadow: 0 4px 12px rgba(0,0,0,0.06);
-      --shadow-hover: 0 8px 24px rgba(0,0,0,0.1);
+      --accent-soft: #fef3c7;
+      --shadow: 0 4px 16px rgba(0,0,0,0.06);
+      --shadow-lg: 0 12px 32px rgba(0,0,0,0.1);
       --radius: 12px;
-      --transition: 180ms ease;
+      --radius-sm: 8px;
+      --transition: 180ms cubic-bezier(0.4, 0, 0.2, 1);
+      --blue: #3b82f6; --blue-bg: #dbeafe;
+      --green: #22c55e; --green-bg: #dcfce7;
+      --yellow: #eab308; --yellow-bg: #fef9c3;
+      --purple: #a855f7; --purple-bg: #f3e8ff;
+      --pink: #ec4899; --pink-bg: #fce7f3;
+      --orange: #f97316; --orange-bg: #ffedd5;
+      --gray: #6b7280; --gray-bg: #f3f4f6;
     }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
       line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
     }
+
     /* Header */
-    header {
+    .header {
       background: var(--surface);
       border-bottom: 1px solid var(--border);
-      padding: 12px 24px;
+      padding: 12px 20px;
       display: flex;
       align-items: center;
       gap: 16px;
+      flex-wrap: wrap;
       position: sticky;
       top: 0;
       z-index: 50;
       box-shadow: 0 1px 3px rgba(0,0,0,0.04);
     }
     .logo {
+      font-size: 1.35rem;
       font-weight: 700;
-      font-size: 1.25rem;
       display: flex;
       align-items: center;
       gap: 8px;
+      color: var(--text);
       white-space: nowrap;
     }
     .logo span { color: var(--accent); }
     .search-wrap {
       flex: 1;
-      max-width: 420px;
+      min-width: 180px;
+      max-width: 320px;
       position: relative;
     }
     .search-wrap input {
       width: 100%;
-      padding: 8px 12px 8px 36px;
+      padding: 9px 14px 9px 38px;
       border: 1px solid var(--border);
-      border-radius: 8px;
-      font-size: 0.9rem;
+      border-radius: 999px;
       background: var(--bg);
-      transition: border var(--transition);
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color var(--transition), box-shadow var(--transition);
     }
     .search-wrap input:focus {
-      outline: none;
       border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(245,158,11,0.15);
+      box-shadow: 0 0 0 3px var(--accent-soft);
     }
-    .search-icon {
+    .search-wrap::before {
+      content: '🔍';
       position: absolute;
-      left: 10px;
+      left: 12px;
       top: 50%;
       transform: translateY(-50%);
-      color: var(--muted);
-      pointer-events: none;
+      font-size: 0.85rem;
+      opacity: 0.6;
     }
     .header-actions {
       display: flex;
       align-items: center;
       gap: 8px;
-      margin-left: auto;
+      flex-wrap: wrap;
     }
-    button {
-      font-family: inherit;
-      cursor: pointer;
-      border: none;
-      border-radius: 8px;
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      font-size: 0.875rem;
       font-weight: 500;
+      cursor: pointer;
       transition: all var(--transition);
+      color: var(--text);
+      white-space: nowrap;
+    }
+    .btn:hover {
+      background: var(--bg);
+      border-color: #d1d5db;
     }
     .btn-primary {
       background: var(--accent);
-      color: white;
-      padding: 8px 16px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
+      border-color: var(--accent);
+      color: #fff;
     }
-    .btn-primary:hover { background: #d97706; transform: translateY(-1px); }
+    .btn-primary:hover {
+      background: #d97706;
+      border-color: #d97706;
+    }
     .btn-ghost {
+      border-color: transparent;
       background: transparent;
-      color: var(--muted);
-      padding: 8px 12px;
     }
-    .btn-ghost:hover { background: #f3f4f6; color: var(--text); }
-    .btn-sm { padding: 6px 10px; font-size: 0.85rem; }
-    /* Filters */
+    .btn-ghost:hover { background: var(--bg); }
     .filters {
       display: flex;
-      gap: 8px;
+      gap: 6px;
       flex-wrap: wrap;
-      padding: 12px 24px;
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
+      align-items: center;
     }
     .filter-chip {
-      padding: 4px 12px;
+      padding: 4px 10px;
       border-radius: 999px;
-      font-size: 0.8rem;
-      background: #f3f4f6;
-      color: var(--muted);
-      border: 1px solid transparent;
+      font-size: 0.75rem;
+      border: 1px solid var(--border);
+      background: var(--surface);
       cursor: pointer;
       transition: all var(--transition);
+      user-select: none;
     }
     .filter-chip.active {
-      background: #fef3c7;
+      background: var(--accent-soft);
+      border-color: var(--accent);
       color: #92400e;
-      border-color: #fcd34d;
+      font-weight: 600;
     }
-    .filter-chip:hover { background: #e5e7eb; }
+    .filter-chip.color-dot {
+      width: 22px;
+      height: 22px;
+      padding: 0;
+      border-radius: 50%;
+      border-width: 2px;
+    }
+    .filter-chip.color-dot.active {
+      box-shadow: 0 0 0 2px var(--accent);
+    }
+
     /* Board */
     .board {
       display: grid;
       grid-template-columns: repeat(4, minmax(260px, 1fr));
       gap: 16px;
-      padding: 20px 24px;
+      padding: 20px;
       overflow-x: auto;
-      min-height: calc(100vh - 140px);
+      min-height: calc(100vh - 70px);
+      align-items: start;
     }
+    @media (max-width: 1100px) {
+      .board { grid-template-columns: repeat(4, minmax(240px, 1fr)); }
+    }
+    @media (max-width: 700px) {
+      .board {
+        grid-template-columns: 1fr;
+        padding: 12px;
+      }
+      .header { padding: 10px 12px; }
+    }
+
     .column {
-      background: #f3f4f6;
+      background: rgba(255,255,255,0.6);
       border-radius: var(--radius);
+      border: 1px solid var(--border);
       display: flex;
       flex-direction: column;
-      min-height: 400px;
-      transition: background var(--transition);
+      max-height: calc(100vh - 110px);
+      transition: background var(--transition), border-color var(--transition);
     }
     .column.drag-over {
-      background: #e0e7ff;
-      outline: 2px dashed #6366f1;
+      background: var(--accent-soft);
+      border-color: var(--accent);
+      border-style: dashed;
     }
     .column-header {
-      padding: 14px 16px;
-      font-weight: 600;
-      font-size: 0.9rem;
+      padding: 14px 16px 10px;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.03em;
+      justify-content: space-between;
+      border-bottom: 1px solid transparent;
+    }
+    .column-title {
+      font-weight: 600;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
     .column-count {
-      background: white;
-      padding: 2px 8px;
-      border-radius: 999px;
+      background: var(--bg);
+      color: var(--muted);
       font-size: 0.75rem;
       font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 999px;
     }
     .column-body {
+      padding: 8px;
+      overflow-y: auto;
       flex: 1;
-      padding: 0 12px 16px;
+      min-height: 120px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      min-height: 100px;
+      gap: 8px;
     }
-    /* Card */
+
+    /* Cards */
     .card {
       background: var(--surface);
-      border-radius: 10px;
-      padding: 14px;
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
       box-shadow: var(--shadow);
       cursor: grab;
-      transition: all var(--transition);
-      border-left: 4px solid transparent;
+      border-left: 4px solid var(--gray);
+      transition: transform var(--transition), box-shadow var(--transition), opacity var(--transition);
       position: relative;
+      user-select: none;
     }
     .card:hover {
-      box-shadow: var(--shadow-hover);
-      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-1px);
     }
     .card.dragging {
       opacity: 0.6;
-      transform: scale(1.02);
+      transform: scale(1.02) rotate(1deg);
       cursor: grabbing;
+      z-index: 100;
     }
+    .card[data-color="blue"] { border-left-color: var(--blue); background: linear-gradient(to right, var(--blue-bg) 0%, var(--surface) 12%); }
+    .card[data-color="green"] { border-left-color: var(--green); background: linear-gradient(to right, var(--green-bg) 0%, var(--surface) 12%); }
+    .card[data-color="yellow"] { border-left-color: var(--yellow); background: linear-gradient(to right, var(--yellow-bg) 0%, var(--surface) 12%); }
+    .card[data-color="purple"] { border-left-color: var(--purple); background: linear-gradient(to right, var(--purple-bg) 0%, var(--surface) 12%); }
+    .card[data-color="pink"] { border-left-color: var(--pink); background: linear-gradient(to right, var(--pink-bg) 0%, var(--surface) 12%); }
+    .card[data-color="orange"] { border-left-color: var(--orange); background: linear-gradient(to right, var(--orange-bg) 0%, var(--surface) 12%); }
+    .card[data-color="gray"] { border-left-color: var(--gray); background: linear-gradient(to right, var(--gray-bg) 0%, var(--surface) 12%); }
+
     .card-title {
       font-weight: 600;
       font-size: 0.95rem;
       margin-bottom: 6px;
       word-break: break-word;
     }
-    .card-tags {
+    .card-meta {
       display: flex;
       flex-wrap: wrap;
       gap: 4px;
@@ -212,65 +273,102 @@
     }
     .tag {
       font-size: 0.7rem;
-      padding: 2px 8px;
+      background: var(--bg);
+      color: var(--muted);
+      padding: 2px 7px;
       border-radius: 999px;
-      background: #f3f4f6;
-      color: var(--muted);
+      border: 1px solid var(--border);
     }
-    .card-meta {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 10px;
-      font-size: 0.75rem;
+    .card-progress {
+      font-size: 0.7rem;
       color: var(--muted);
-    }
-    .checklist-progress {
+      margin-top: 6px;
       display: flex;
       align-items: center;
       gap: 4px;
     }
-    /* Colors */
-    .color-blue { border-left-color: #3b82f6; }
-    .color-green { border-left-color: #22c55e; }
-    .color-yellow { border-left-color: #eab308; }
-    .color-purple { border-left-color: #a855f7; }
-    .color-pink { border-left-color: #ec4899; }
-    .color-orange { border-left-color: #f97316; }
-    .color-gray { border-left-color: #6b7280; }
-    /* Empty state */
+    .card-actions {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      opacity: 0;
+      transition: opacity var(--transition);
+      display: flex;
+      gap: 2px;
+    }
+    .card:hover .card-actions { opacity: 1; }
+    .icon-btn {
+      width: 26px;
+      height: 26px;
+      border: none;
+      background: var(--bg);
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      color: var(--muted);
+      transition: all var(--transition);
+    }
+    .icon-btn:hover { background: #fee2e2; color: #dc2626; }
+
+    /* Empty states */
     .empty-column {
       flex: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      padding: 24px 12px;
+      text-align: center;
       color: var(--muted);
       font-size: 0.85rem;
-      text-align: center;
-      padding: 24px;
-      border: 2px dashed #d1d5db;
-      border-radius: 8px;
-      margin: 0 4px;
+      border: 1.5px dashed var(--border);
+      border-radius: var(--radius-sm);
+      margin: 4px;
+      min-height: 100px;
+      transition: all var(--transition);
     }
-    .empty-column .emoji { font-size: 1.5rem; margin-bottom: 8px; }
+    .column.drag-over .empty-column {
+      border-color: var(--accent);
+      background: rgba(245, 158, 11, 0.08);
+    }
+    .empty-column .spark {
+      font-size: 1.6rem;
+      margin-bottom: 6px;
+      opacity: 0.7;
+    }
+    .board-empty {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 80px 20px;
+      color: var(--muted);
+    }
+    .board-empty h2 {
+      font-size: 1.5rem;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .board-empty p { margin-bottom: 20px; max-width: 360px; margin-left: auto; margin-right: auto; }
+
     /* Modal */
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.4);
+      background: rgba(0,0,0,0.35);
       display: flex;
       align-items: center;
       justify-content: center;
-      z-index: 100;
+      z-index: 1000;
       opacity: 0;
-      pointer-events: none;
-      transition: opacity var(--transition);
+      visibility: hidden;
+      transition: opacity var(--transition), visibility var(--transition);
       padding: 16px;
     }
     .modal-overlay.open {
       opacity: 1;
-      pointer-events: auto;
+      visibility: visible;
     }
     .modal {
       background: var(--surface);
@@ -279,7 +377,7 @@
       max-width: 520px;
       max-height: 90vh;
       overflow-y: auto;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+      box-shadow: var(--shadow-lg);
       transform: translateY(12px) scale(0.98);
       transition: transform var(--transition);
     }
@@ -287,48 +385,47 @@
       transform: translateY(0) scale(1);
     }
     .modal-header {
-      padding: 20px 24px 12px;
+      padding: 18px 20px 12px;
       display: flex;
-      justify-content: space-between;
       align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      border-bottom: 1px solid var(--border);
     }
-    .modal-header h2 {
-      font-size: 1.1rem;
+    .modal-title-input {
+      flex: 1;
+      font-size: 1.2rem;
       font-weight: 600;
+      border: none;
+      outline: none;
+      background: transparent;
+      color: var(--text);
+      width: 100%;
     }
-    .modal-body {
-      padding: 0 24px 24px;
-    }
-    .form-group {
-      margin-bottom: 16px;
-    }
-    .form-group label {
+    .modal-body { padding: 16px 20px; }
+    .form-group { margin-bottom: 18px; }
+    .form-label {
       display: block;
-      font-size: 0.8rem;
-      font-weight: 500;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
       color: var(--muted);
       margin-bottom: 6px;
     }
-    .form-group input[type="text"],
-    .form-group textarea {
+    .form-textarea {
       width: 100%;
+      min-height: 90px;
       padding: 10px 12px;
       border: 1px solid var(--border);
-      border-radius: 8px;
-      font-size: 0.95rem;
+      border-radius: var(--radius-sm);
       font-family: inherit;
-      transition: border var(--transition);
-    }
-    .form-group input:focus,
-    .form-group textarea:focus {
-      outline: none;
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(245,158,11,0.15);
-    }
-    .form-group textarea {
-      min-height: 100px;
+      font-size: 0.9rem;
       resize: vertical;
+      outline: none;
+      transition: border-color var(--transition);
     }
+    .form-textarea:focus { border-color: var(--accent); }
     .color-picker {
       display: flex;
       gap: 8px;
@@ -338,274 +435,219 @@
       width: 28px;
       height: 28px;
       border-radius: 50%;
-      cursor: pointer;
       border: 2px solid transparent;
-      transition: transform var(--transition);
+      cursor: pointer;
+      transition: transform var(--transition), box-shadow var(--transition);
     }
     .color-swatch:hover { transform: scale(1.1); }
-    .color-swatch.selected { border-color: var(--text); box-shadow: 0 0 0 2px white, 0 0 0 4px currentColor; }
-    .color-swatch.blue { background: #3b82f6; }
-    .color-swatch.green { background: #22c55e; }
-    .color-swatch.yellow { background: #eab308; }
-    .color-swatch.purple { background: #a855f7; }
-    .color-swatch.pink { background: #ec4899; }
-    .color-swatch.orange { background: #f97316; }
-    .color-swatch.gray { background: #6b7280; }
+    .color-swatch.active {
+      box-shadow: 0 0 0 2px var(--text);
+    }
+    .color-swatch[data-color="blue"] { background: var(--blue); }
+    .color-swatch[data-color="green"] { background: var(--green); }
+    .color-swatch[data-color="yellow"] { background: var(--yellow); }
+    .color-swatch[data-color="purple"] { background: var(--purple); }
+    .color-swatch[data-color="pink"] { background: var(--pink); }
+    .color-swatch[data-color="orange"] { background: var(--orange); }
+    .color-swatch[data-color="gray"] { background: var(--gray); }
+
     .tags-input-wrap {
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
+      align-items: center;
       padding: 8px;
       border: 1px solid var(--border);
-      border-radius: 8px;
+      border-radius: var(--radius-sm);
       min-height: 42px;
-      align-items: center;
     }
     .tags-input-wrap input {
-      border: none !important;
+      border: none;
       outline: none;
       flex: 1;
       min-width: 80px;
-      padding: 4px !important;
-      box-shadow: none !important;
+      font-size: 0.9rem;
+      background: transparent;
     }
-    .tag-item {
+    .tag-editable {
       display: inline-flex;
       align-items: center;
       gap: 4px;
-      background: #fef3c7;
-      color: #92400e;
+      background: var(--bg);
       padding: 2px 8px;
       border-radius: 999px;
       font-size: 0.8rem;
+      border: 1px solid var(--border);
     }
-    .tag-item button {
-      background: none;
+    .tag-editable button {
       border: none;
-      color: inherit;
+      background: none;
       cursor: pointer;
-      font-size: 1rem;
+      color: var(--muted);
+      font-size: 0.9rem;
       line-height: 1;
-      padding: 0;
+      padding: 0 2px;
     }
+    .tag-editable button:hover { color: #dc2626; }
+
     .checklist {
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 6px;
     }
     .checklist-item {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
+      padding: 6px 8px;
+      border-radius: 6px;
+      transition: background var(--transition);
     }
+    .checklist-item:hover { background: var(--bg); }
     .checklist-item input[type="checkbox"] {
-      width: 18px;
-      height: 18px;
+      width: 16px;
+      height: 16px;
       accent-color: var(--accent);
       cursor: pointer;
     }
     .checklist-item input[type="text"] {
       flex: 1;
       border: none;
-      border-bottom: 1px solid transparent;
-      padding: 4px 0;
+      outline: none;
+      background: transparent;
       font-size: 0.9rem;
     }
-    .checklist-item input[type="text"]:focus {
-      outline: none;
-      border-bottom-color: var(--border);
-    }
-    .checklist-item.done span, .checklist-item.done input[type="text"] {
+    .checklist-item.done input[type="text"] {
       text-decoration: line-through;
       color: var(--muted);
     }
-    .add-check-btn {
-      margin-top: 8px;
-      color: var(--muted);
-      font-size: 0.85rem;
+    .checklist-item .remove-check {
+      opacity: 0;
+      border: none;
       background: none;
-      padding: 4px 0;
+      cursor: pointer;
+      color: var(--muted);
+      font-size: 1rem;
+      padding: 0 4px;
     }
-    .add-check-btn:hover { color: var(--accent); }
+    .checklist-item:hover .remove-check { opacity: 1; }
+    .add-check-btn {
+      margin-top: 4px;
+      font-size: 0.85rem;
+      color: var(--accent);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px 0;
+      font-weight: 500;
+    }
+    .add-check-btn:hover { text-decoration: underline; }
+
     .modal-footer {
-      padding: 16px 24px;
-      border-top: 1px solid var(--border);
+      padding: 12px 20px 18px;
       display: flex;
       justify-content: space-between;
-      gap: 8px;
+      align-items: center;
+      border-top: 1px solid var(--border);
+      gap: 10px;
+      flex-wrap: wrap;
     }
-    .btn-danger {
-      background: #fef2f2;
-      color: #dc2626;
-      padding: 8px 14px;
-    }
-    .btn-danger:hover { background: #fee2e2; }
-    .btn-secondary {
-      background: #f3f4f6;
-      color: var(--text);
-      padding: 8px 14px;
-    }
-    .btn-secondary:hover { background: #e5e7eb; }
-    .created-date {
-      font-size: 0.8rem;
+    .modal-meta {
+      font-size: 0.75rem;
       color: var(--muted);
-      margin-top: 8px;
     }
+    .modal-actions { display: flex; gap: 8px; }
+
     /* Toast */
     .toast {
       position: fixed;
       bottom: 24px;
-      right: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
       background: #1a1a1a;
-      color: white;
-      padding: 12px 20px;
-      border-radius: 8px;
-      font-size: 0.9rem;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 999px;
+      font-size: 0.875rem;
+      z-index: 2000;
       opacity: 0;
-      transform: translateY(12px);
-      transition: all var(--transition);
-      z-index: 200;
+      transition: all 250ms ease;
       pointer-events: none;
+      box-shadow: var(--shadow-lg);
     }
     .toast.show {
       opacity: 1;
-      transform: translateY(0);
+      transform: translateX(-50%) translateY(0);
     }
-    /* Responsive */
-    @media (max-width: 900px) {
-      .board {
-        grid-template-columns: repeat(4, minmax(240px, 1fr));
-      }
-      header { flex-wrap: wrap; gap: 10px; }
-      .search-wrap { order: 3; max-width: 100%; width: 100%; }
-    }
-    @media (max-width: 600px) {
-      .board {
-        grid-template-columns: 1fr;
-        padding: 12px;
-      }
-      .column { min-height: 200px; }
-      header { padding: 10px 12px; }
-    }
-    /* Dropdown for export */
-    .dropdown {
-      position: relative;
-    }
-    .dropdown-menu {
-      position: absolute;
-      right: 0;
-      top: 100%;
-      margin-top: 4px;
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      box-shadow: var(--shadow-hover);
-      min-width: 160px;
-      display: none;
-      z-index: 60;
-      overflow: hidden;
-    }
-    .dropdown.open .dropdown-menu { display: block; }
-    .dropdown-menu button {
-      display: block;
-      width: 100%;
-      text-align: left;
-      padding: 10px 14px;
-      background: none;
-      border: none;
-      font-size: 0.9rem;
-      color: var(--text);
-    }
-    .dropdown-menu button:hover { background: #f3f4f6; }
+
+    /* Keyboard hint */
     .kbd {
-      font-size: 0.7rem;
-      background: #f3f4f6;
-      padding: 2px 5px;
+      display: inline-block;
+      padding: 1px 5px;
       border-radius: 4px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      font-size: 0.7rem;
+      font-family: inherit;
       color: var(--muted);
-      margin-left: 6px;
     }
+
+    /* Stage icons subtle */
+    .stage-icon { opacity: 0.7; }
   </style>
 </head>
 <body>
-  <header>
-    <div class="logo">✨ <span>Spark</span>Board</div>
+  <header class="header">
+    <div class="logo">SparkBoard <span>✨</span></div>
     <div class="search-wrap">
-      <span class="search-icon">🔍</span>
-      <input type="text" id="searchInput" placeholder="Search ideas, tags, notes..." aria-label="Search">
+      <input type="search" id="searchInput" placeholder="Search ideas, tags..." autocomplete="off" />
+    </div>
+    <div class="filters" id="tagFilters"></div>
+    <div class="filters" id="colorFilters">
+      <span class="filter-chip color-dot" data-color="all" title="All colors" style="background:linear-gradient(135deg,#3b82f6,#22c55e,#eab308,#a855f7,#ec4899,#f97316);"></span>
     </div>
     <div class="header-actions">
-      <div class="dropdown" id="exportDropdown">
-        <button class="btn-ghost btn-sm" onclick="toggleExport()">Export ▾</button>
-        <div class="dropdown-menu">
-          <button onclick="exportJSON()">Export as JSON</button>
-          <button onclick="exportMarkdown()">Export as Markdown</button>
-        </div>
-      </div>
-      <button class="btn-primary" onclick="openModal()">+ New Idea <span class="kbd">N</span></button>
+      <button class="btn btn-ghost" id="exportMdBtn" title="Export Markdown">MD</button>
+      <button class="btn btn-ghost" id="exportJsonBtn" title="Export JSON">JSON</button>
+      <button class="btn btn-primary" id="newIdeaBtn">+ New Idea <span class="kbd">N</span></button>
     </div>
   </header>
 
-  <div class="filters" id="filtersBar">
-    <button class="filter-chip active" data-filter="all" onclick="setFilter('all')">All</button>
-    <button class="filter-chip" data-filter="blue" onclick="setFilter('blue')">Blue</button>
-    <button class="filter-chip" data-filter="green" onclick="setFilter('green')">Green</button>
-    <button class="filter-chip" data-filter="yellow" onclick="setFilter('yellow')">Yellow</button>
-    <button class="filter-chip" data-filter="purple" onclick="setFilter('purple')">Purple</button>
-    <button class="filter-chip" data-filter="pink" onclick="setFilter('pink')">Pink</button>
-    <button class="filter-chip" data-filter="orange" onclick="setFilter('orange')">Orange</button>
-    <span style="width:1px;background:var(--border);margin:0 4px;"></span>
-    <div id="tagFilters"></div>
-  </div>
+  <main class="board" id="board"></main>
 
-  <div class="board" id="board"></div>
-
-  <!-- Modal -->
-  <div class="modal-overlay" id="modalOverlay" onclick="handleOverlayClick(event)">
+  <!-- Detail Modal -->
+  <div class="modal-overlay" id="modalOverlay">
     <div class="modal" role="dialog" aria-modal="true">
       <div class="modal-header">
-        <h2 id="modalTitle">New Idea</h2>
-        <button class="btn-ghost" onclick="closeModal()" aria-label="Close">✕</button>
+        <input class="modal-title-input" id="modalTitle" placeholder="Idea title..." />
+        <button class="icon-btn" id="modalClose" title="Close (Esc)">✕</button>
       </div>
       <div class="modal-body">
         <div class="form-group">
-          <label for="ideaTitle">Title</label>
-          <input type="text" id="ideaTitle" placeholder="What’s the spark?" maxlength="120">
+          <label class="form-label">Color</label>
+          <div class="color-picker" id="colorPicker"></div>
         </div>
         <div class="form-group">
-          <label>Color</label>
-          <div class="color-picker" id="colorPicker">
-            <div class="color-swatch blue selected" data-color="blue" onclick="selectColor('blue')"></div>
-            <div class="color-swatch green" data-color="green" onclick="selectColor('green')"></div>
-            <div class="color-swatch yellow" data-color="yellow" onclick="selectColor('yellow')"></div>
-            <div class="color-swatch purple" data-color="purple" onclick="selectColor('purple')"></div>
-            <div class="color-swatch pink" data-color="pink" onclick="selectColor('pink')"></div>
-            <div class="color-swatch orange" data-color="orange" onclick="selectColor('orange')"></div>
-            <div class="color-swatch gray" data-color="gray" onclick="selectColor('gray')"></div>
-          </div>
-        </div>
-        <div class="form-group">
-          <label>Tags</label>
+          <label class="form-label">Tags</label>
           <div class="tags-input-wrap" id="tagsWrap">
-            <input type="text" id="tagInput" placeholder="Add tag + Enter" onkeydown="handleTagKey(event)">
+            <input type="text" id="tagInput" placeholder="Add tag + Enter" />
           </div>
         </div>
         <div class="form-group">
-          <label for="ideaNotes">Notes</label>
-          <textarea id="ideaNotes" placeholder="Details, thoughts, context..."></textarea>
+          <label class="form-label">Notes</label>
+          <textarea class="form-textarea" id="modalNotes" placeholder="Capture more thoughts..."></textarea>
         </div>
         <div class="form-group">
-          <label>Checklist</label>
+          <label class="form-label">Checklist</label>
           <div class="checklist" id="checklist"></div>
-          <button class="add-check-btn" onclick="addChecklistItem()">+ Add item</button>
+          <button class="add-check-btn" id="addCheckBtn">+ Add item</button>
         </div>
-        <div class="created-date" id="createdDate"></div>
       </div>
       <div class="modal-footer">
-        <button class="btn-danger" id="deleteBtn" onclick="deleteIdea()" style="display:none">Delete</button>
-        <div style="display:flex;gap:8px;margin-left:auto">
-          <button class="btn-secondary" onclick="closeModal()">Cancel</button>
-          <button class="btn-primary" onclick="saveIdea()">Save Idea</button>
+        <div class="modal-meta" id="modalMeta"></div>
+        <div class="modal-actions">
+          <button class="btn" id="deleteBtn" style="color:#dc2626;border-color:#fecaca;">Delete</button>
+          <button class="btn btn-primary" id="saveBtn">Save</button>
         </div>
       </div>
     </div>
@@ -614,133 +656,164 @@
   <div class="toast" id="toast"></div>
 
   <script>
-    // ===== Data & State =====
+    // ========== DATA & CONSTANTS ==========
     const STAGES = [
-      { id: 'inbox', label: 'Inbox', emoji: '📬' },
-      { id: 'exploring', label: 'Exploring', emoji: '🔍' },
-      { id: 'building', label: 'Building', emoji: '🛠️' },
-      { id: 'done', label: 'Done', emoji: '✅' }
+      { id: 'inbox', label: 'Inbox', icon: '📥' },
+      { id: 'exploring', label: 'Exploring', icon: '🔍' },
+      { id: 'building', label: 'Building', icon: '🔨' },
+      { id: 'done', label: 'Done', icon: '✅' }
     ];
     const COLORS = ['blue', 'green', 'yellow', 'purple', 'pink', 'orange', 'gray'];
     const STORAGE_KEY = 'sparkboard-data-v1';
 
     let ideas = [];
-    let currentFilter = 'all';
-    let currentTagFilter = null;
+    let currentId = null; // for modal
     let searchQuery = '';
-    let editingId = null;
-    let selectedColor = 'blue';
-    let currentTags = [];
-    let currentChecklist = [];
+    let activeTags = new Set();
+    let activeColor = 'all';
+    let dragId = null;
 
-    // ===== Persistence =====
-    function loadData() {
-      try {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        if (raw) {
-          const parsed = JSON.parse(raw);
-          ideas = Array.isArray(parsed.ideas) ? parsed.ideas : [];
-        }
-      } catch (e) {
-        console.warn('Failed to load data', e);
-        ideas = [];
-      }
-    }
-
-    function saveData() {
-      try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify({ ideas, version: 1 }));
-      } catch (e) {
-        showToast('Could not save – storage full?');
-      }
-    }
-
-    // ===== Utils =====
+    // ========== UTILS ==========
     function uid() {
       return crypto.randomUUID ? crypto.randomUUID() : 'id-' + Date.now() + '-' + Math.random().toString(36).slice(2, 9);
     }
-
-    function showToast(msg) {
-      const t = document.getElementById('toast');
-      t.textContent = msg;
-      t.classList.add('show');
-      setTimeout(() => t.classList.remove('show'), 2200);
-    }
-
+    function now() { return new Date().toISOString(); }
     function formatDate(iso) {
       if (!iso) return '';
       const d = new Date(iso);
       return d.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
     }
+    function toast(msg) {
+      const el = document.getElementById('toast');
+      el.textContent = msg;
+      el.classList.add('show');
+      clearTimeout(toast._t);
+      toast._t = setTimeout(() => el.classList.remove('show'), 2200);
+    }
+    function save() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({ version: 1, ideas }));
+      } catch (e) {
+        toast('Could not save – storage full?');
+      }
+    }
+    function load() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return;
+        const data = JSON.parse(raw);
+        if (data && Array.isArray(data.ideas)) {
+          ideas = data.ideas.map(normalizeIdea);
+        }
+      } catch (e) {
+        console.warn('Corrupt storage, starting fresh');
+        ideas = [];
+        toast('Data was reset (corrupt storage)');
+      }
+    }
+    function normalizeIdea(i) {
+      return {
+        id: i.id || uid(),
+        title: i.title || 'Untitled',
+        notes: i.notes || '',
+        tags: Array.isArray(i.tags) ? i.tags : [],
+        color: COLORS.includes(i.color) ? i.color : 'blue',
+        stage: STAGES.some(s => s.id === i.stage) ? i.stage : 'inbox',
+        checklist: Array.isArray(i.checklist) ? i.checklist.map(c => ({
+          id: c.id || uid(),
+          text: c.text || '',
+          done: !!c.done
+        })) : [],
+        createdAt: i.createdAt || now(),
+        updatedAt: i.updatedAt || now()
+      };
+    }
 
-    // ===== Rendering =====
-    function render() {
+    // ========== RENDER ==========
+    function getFilteredIdeas() {
+      return ideas.filter(idea => {
+        if (activeColor !== 'all' && idea.color !== activeColor) return false;
+        if (activeTags.size > 0) {
+          const has = [...activeTags].every(t => idea.tags.includes(t));
+          if (!has) return false;
+        }
+        if (searchQuery) {
+          const q = searchQuery.toLowerCase();
+          const hay = (idea.title + ' ' + idea.notes + ' ' + idea.tags.join(' ')).toLowerCase();
+          if (!hay.includes(q)) return false;
+        }
+        return true;
+      });
+    }
+
+    function renderBoard() {
       const board = document.getElementById('board');
-      board.innerHTML = '';
-
       const filtered = getFilteredIdeas();
 
-      STAGES.forEach(stage => {
-        const col = document.createElement('div');
-        col.className = 'column';
-        col.dataset.stage = stage.id;
-        col.addEventListener('dragover', handleDragOver);
-        col.addEventListener('dragleave', handleDragLeave);
-        col.addEventListener('drop', handleDrop);
+      if (ideas.length === 0) {
+        board.innerHTML = `
+          <div class="board-empty">
+            <h2>✨ Your next big idea starts here</h2>
+            <p>SparkBoard is ready. Capture a thought, drag it through stages, and watch it grow.</p>
+            <button class="btn btn-primary" onclick="createIdea()">+ Create your first spark</button>
+            <p style="margin-top:16px;font-size:0.8rem;">Tip: press <span class="kbd">N</span> or <span class="kbd">Ctrl+K</span> anytime</p>
+          </div>`;
+        return;
+      }
 
+      board.innerHTML = STAGES.map(stage => {
         const stageIdeas = filtered.filter(i => i.stage === stage.id);
-
-        col.innerHTML = `
-          <div class="column-header">
-            <span>${stage.emoji} ${stage.label}</span>
-            <span class="column-count">${stageIdeas.length}</span>
-          </div>
-          <div class="column-body" data-stage="${stage.id}"></div>
-        `;
-
-        const body = col.querySelector('.column-body');
-
-        if (stageIdeas.length === 0) {
-          body.innerHTML = `
-            <div class="empty-column">
-              <div class="emoji">✨</div>
-              <div>No sparks yet</div>
-              <div style="font-size:0.75rem;margin-top:4px">Drag here or hit N</div>
+        const cardsHtml = stageIdeas.map(idea => renderCard(idea)).join('');
+        const emptyHtml = stageIdeas.length === 0 ? `
+          <div class="empty-column">
+            <div class="spark">✨</div>
+            <div>No sparks yet</div>
+            <div style="font-size:0.75rem;margin-top:4px;">Drag one here</div>
+          </div>` : '';
+        return `
+          <div class="column" data-stage="${stage.id}">
+            <div class="column-header">
+              <div class="column-title">
+                <span class="stage-icon">${stage.icon}</span>
+                ${stage.label}
+              </div>
+              <span class="column-count">${stageIdeas.length}</span>
             </div>
-          `;
-        } else {
-          stageIdeas.forEach(idea => {
-            body.appendChild(createCardElement(idea));
-          });
-        }
+            <div class="column-body" data-stage="${stage.id}">
+              ${cardsHtml}
+              ${emptyHtml}
+            </div>
+          </div>`;
+      }).join('');
 
-        board.appendChild(col);
+      // Attach drag listeners
+      document.querySelectorAll('.card').forEach(card => {
+        card.addEventListener('dragstart', onDragStart);
+        card.addEventListener('dragend', onDragEnd);
+      });
+      document.querySelectorAll('.column').forEach(col => {
+        col.addEventListener('dragover', onDragOver);
+        col.addEventListener('dragleave', onDragLeave);
+        col.addEventListener('drop', onDrop);
       });
 
       renderTagFilters();
     }
 
-    function createCardElement(idea) {
-      const card = document.createElement('div');
-      card.className = `card color-${idea.color || 'blue'}`;
-      card.draggable = true;
-      card.dataset.id = idea.id;
-      card.addEventListener('dragstart', handleDragStart);
-      card.addEventListener('dragend', handleDragEnd);
-      card.addEventListener('click', () => openModal(idea.id));
-
-      const doneCount = (idea.checklist || []).filter(c => c.done).length;
-      const totalCheck = (idea.checklist || []).length;
-
-      card.innerHTML = `
-        <div class="card-title">${escapeHtml(idea.title || 'Untitled')}</div>
-        ${idea.tags && idea.tags.length ? `<div class="card-tags">${idea.tags.map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('')}</div>` : ''}
-        <div class="card-meta">
-          <span>${formatDate(idea.createdAt)}</span>
-          ${totalCheck ? `<span class="checklist-progress">☑ ${doneCount}/${totalCheck}</span>` : ''}
-        </div>
-      `;
-      return card;
+    function renderCard(idea) {
+      const doneCount = idea.checklist.filter(c => c.done).length;
+      const total = idea.checklist.length;
+      const progress = total > 0 ? `<div class="card-progress">☑ ${doneCount}/${total}</div>` : '';
+      const tags = idea.tags.slice(0, 4).map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('');
+      return `
+        <div class="card" draggable="true" data-id="${idea.id}" data-color="${idea.color}" onclick="openModal('${idea.id}')">
+          <div class="card-title">${escapeHtml(idea.title)}</div>
+          ${progress}
+          <div class="card-meta">${tags}</div>
+          <div class="card-actions">
+            <button class="icon-btn" onclick="event.stopPropagation();deleteIdea('${idea.id}')" title="Delete">🗑</button>
+          </div>
+        </div>`;
     }
 
     function escapeHtml(str) {
@@ -749,310 +822,265 @@
       return div.innerHTML;
     }
 
-    function getFilteredIdeas() {
-      return ideas.filter(idea => {
-        // color / all filter
-        if (currentFilter !== 'all' && idea.color !== currentFilter) return false;
-        // tag filter
-        if (currentTagFilter && !(idea.tags || []).includes(currentTagFilter)) return false;
-        // search
-        if (searchQuery) {
-          const q = searchQuery.toLowerCase();
-          const inTitle = (idea.title || '').toLowerCase().includes(q);
-          const inNotes = (idea.notes || '').toLowerCase().includes(q);
-          const inTags = (idea.tags || []).some(t => t.toLowerCase().includes(q));
-          if (!inTitle && !inNotes && !inTags) return false;
-        }
-        return true;
-      });
-    }
-
     function renderTagFilters() {
-      const allTags = [...new Set(ideas.flatMap(i => i.tags || []))].sort();
-      const container = document.getElementById('tagFilters');
-      container.innerHTML = allTags.map(tag => `
-        <button class="filter-chip ${currentTagFilter === tag ? 'active' : ''}" onclick="setTagFilter('${escapeHtml(tag)}')">#${escapeHtml(tag)}</button>
+      const allTags = [...new Set(ideas.flatMap(i => i.tags))].sort();
+      const el = document.getElementById('tagFilters');
+      if (allTags.length === 0) {
+        el.innerHTML = '';
+        return;
+      }
+      el.innerHTML = allTags.map(t => `
+        <span class="filter-chip ${activeTags.has(t) ? 'active' : ''}" data-tag="${escapeHtml(t)}">${escapeHtml(t)}</span>
       `).join('');
-    }
-
-    // ===== Filters =====
-    function setFilter(f) {
-      currentFilter = f;
-      document.querySelectorAll('.filter-chip[data-filter]').forEach(el => {
-        el.classList.toggle('active', el.dataset.filter === f);
+      el.querySelectorAll('.filter-chip').forEach(chip => {
+        chip.onclick = () => {
+          const tag = chip.dataset.tag;
+          if (activeTags.has(tag)) activeTags.delete(tag);
+          else activeTags.add(tag);
+          renderBoard();
+        };
       });
-      render();
     }
 
-    function setTagFilter(tag) {
-      currentTagFilter = currentTagFilter === tag ? null : tag;
-      render();
+    function renderColorFilters() {
+      const el = document.getElementById('colorFilters');
+      // already has all
+      COLORS.forEach(c => {
+        if (!el.querySelector(`[data-color="${c}"]`)) {
+          const sw = document.createElement('span');
+          sw.className = 'filter-chip color-dot';
+          sw.dataset.color = c;
+          sw.style.background = `var(--${c})`;
+          sw.title = c;
+          el.appendChild(sw);
+        }
+      });
+      el.querySelectorAll('.color-dot').forEach(dot => {
+        dot.classList.toggle('active', dot.dataset.color === activeColor);
+        dot.onclick = () => {
+          activeColor = dot.dataset.color;
+          renderColorFilters();
+          renderBoard();
+        };
+      });
     }
 
-    // ===== Drag & Drop =====
-    let draggedId = null;
-
-    function handleDragStart(e) {
-      draggedId = e.target.dataset.id;
-      e.target.classList.add('dragging');
-      e.dataTransfer.effectAllowed = 'move';
-      e.dataTransfer.setData('text/plain', draggedId);
+    // ========== CRUD ==========
+    function createIdea(open = true) {
+      const idea = normalizeIdea({
+        id: uid(),
+        title: '',
+        stage: 'inbox',
+        color: 'blue',
+        createdAt: now(),
+        updatedAt: now()
+      });
+      ideas.unshift(idea);
+      save();
+      renderBoard();
+      if (open) openModal(idea.id, true);
+      toast('New spark created');
     }
 
-    function handleDragEnd(e) {
-      e.target.classList.remove('dragging');
-      document.querySelectorAll('.column').forEach(c => c.classList.remove('drag-over'));
-      draggedId = null;
+    function updateIdea(id, patch) {
+      const idx = ideas.findIndex(i => i.id === id);
+      if (idx === -1) return;
+      ideas[idx] = { ...ideas[idx], ...patch, updatedAt: now() };
+      save();
+      renderBoard();
     }
 
-    function handleDragOver(e) {
-      e.preventDefault();
-      e.dataTransfer.dropEffect = 'move';
-      const col = e.currentTarget;
-      col.classList.add('drag-over');
+    function deleteIdea(id) {
+      if (!confirm('Delete this idea forever?')) return;
+      ideas = ideas.filter(i => i.id !== id);
+      save();
+      closeModal();
+      renderBoard();
+      toast('Idea deleted');
     }
 
-    function handleDragLeave(e) {
-      e.currentTarget.classList.remove('drag-over');
-    }
-
-    function handleDrop(e) {
-      e.preventDefault();
-      const col = e.currentTarget;
-      col.classList.remove('drag-over');
-      const stage = col.dataset.stage;
-      const id = e.dataTransfer.getData('text/plain') || draggedId;
-      if (!id || !stage) return;
-
+    // ========== MODAL ==========
+    function openModal(id, isNew = false) {
+      currentId = id;
       const idea = ideas.find(i => i.id === id);
-      if (idea && idea.stage !== stage) {
-        idea.stage = stage;
-        idea.updatedAt = new Date().toISOString();
-        saveData();
-        render();
-        showToast(`Moved to ${STAGES.find(s => s.id === stage).label}`);
-      }
+      if (!idea) return;
+
+      document.getElementById('modalTitle').value = idea.title;
+      document.getElementById('modalNotes').value = idea.notes;
+      document.getElementById('modalMeta').textContent = `Created ${formatDate(idea.createdAt)}`;
+
+      // colors
+      const picker = document.getElementById('colorPicker');
+      picker.innerHTML = COLORS.map(c => `
+        <div class="color-swatch ${idea.color === c ? 'active' : ''}" data-color="${c}" style="background:var(--${c})"></div>
+      `).join('');
+      picker.querySelectorAll('.color-swatch').forEach(s => {
+        s.onclick = () => {
+          picker.querySelectorAll('.color-swatch').forEach(x => x.classList.remove('active'));
+          s.classList.add('active');
+        };
+      });
+
+      // tags
+      renderModalTags(idea.tags);
+
+      // checklist
+      renderChecklist(idea.checklist);
+
+      document.getElementById('modalOverlay').classList.add('open');
+      setTimeout(() => {
+        const titleInput = document.getElementById('modalTitle');
+        titleInput.focus();
+        if (isNew) titleInput.select();
+      }, 50);
     }
 
-    // ===== Modal =====
-    function openModal(id = null) {
-      editingId = id;
-      const overlay = document.getElementById('modalOverlay');
-      const titleEl = document.getElementById('modalTitle');
-      const deleteBtn = document.getElementById('deleteBtn');
+    function renderModalTags(tags) {
+      const wrap = document.getElementById('tagsWrap');
+      // keep the input
+      const input = document.getElementById('tagInput');
+      wrap.innerHTML = '';
+      tags.forEach(t => {
+        const span = document.createElement('span');
+        span.className = 'tag-editable';
+        span.innerHTML = `${escapeHtml(t)} <button type="button" data-tag="${escapeHtml(t)}">×</button>`;
+        span.querySelector('button').onclick = (e) => {
+          e.stopPropagation();
+          const newTags = tags.filter(x => x !== t);
+          renderModalTags(newTags);
+        };
+        wrap.appendChild(span);
+      });
+      wrap.appendChild(input);
+      input.value = '';
+      input.onkeydown = (e) => {
+        if (e.key === 'Enter' || e.key === ',') {
+          e.preventDefault();
+          const val = input.value.trim().replace(/,/g, '');
+          if (val && !tags.includes(val)) {
+            tags = [...tags, val];
+            renderModalTags(tags);
+          }
+        }
+      };
+    }
 
-      if (id) {
-        const idea = ideas.find(i => i.id === id);
-        if (!idea) return;
-        titleEl.textContent = 'Edit Idea';
-        document.getElementById('ideaTitle').value = idea.title || '';
-        document.getElementById('ideaNotes').value = idea.notes || '';
-        selectedColor = idea.color || 'blue';
-        currentTags = [...(idea.tags || [])];
-        currentChecklist = (idea.checklist || []).map(c => ({ ...c }));
-        document.getElementById('createdDate').textContent = `Created ${formatDate(idea.createdAt)}`;
-        deleteBtn.style.display = 'block';
-      } else {
-        titleEl.textContent = 'New Idea';
-        document.getElementById('ideaTitle').value = '';
-        document.getElementById('ideaNotes').value = '';
-        selectedColor = 'blue';
-        currentTags = [];
-        currentChecklist = [];
-        document.getElementById('createdDate').textContent = '';
-        deleteBtn.style.display = 'none';
-      }
+    function getModalTags() {
+      return [...document.querySelectorAll('#tagsWrap .tag-editable')].map(el => el.textContent.replace('×', '').trim());
+    }
 
-      updateColorUI();
-      renderTags();
-      renderChecklist();
-      overlay.classList.add('open');
-      setTimeout(() => document.getElementById('ideaTitle').focus(), 50);
+    function renderChecklist(list) {
+      const el = document.getElementById('checklist');
+      el.innerHTML = list.map(item => `
+        <div class="checklist-item ${item.done ? 'done' : ''}" data-id="${item.id}">
+          <input type="checkbox" ${item.done ? 'checked' : ''} />
+          <input type="text" value="${escapeHtml(item.text)}" placeholder="Checklist item" />
+          <button class="remove-check" title="Remove">×</button>
+        </div>
+      `).join('');
+
+      el.querySelectorAll('.checklist-item').forEach(row => {
+        const cb = row.querySelector('input[type="checkbox"]');
+        const txt = row.querySelector('input[type="text"]');
+        const rm = row.querySelector('.remove-check');
+        cb.onchange = () => row.classList.toggle('done', cb.checked);
+        rm.onclick = () => row.remove();
+      });
+    }
+
+    function getModalChecklist() {
+      return [...document.querySelectorAll('#checklist .checklist-item')].map(row => ({
+        id: row.dataset.id || uid(),
+        text: row.querySelector('input[type="text"]').value.trim(),
+        done: row.querySelector('input[type="checkbox"]').checked
+      })).filter(c => c.text);
+    }
+
+    function saveModal() {
+      if (!currentId) return;
+      const title = document.getElementById('modalTitle').value.trim() || 'Untitled idea';
+      const notes = document.getElementById('modalNotes').value;
+      const color = document.querySelector('#colorPicker .color-swatch.active')?.dataset.color || 'blue';
+      const tags = getModalTags();
+      const checklist = getModalChecklist();
+      updateIdea(currentId, { title, notes, color, tags, checklist });
+      closeModal();
+      toast('Saved ✨');
     }
 
     function closeModal() {
       document.getElementById('modalOverlay').classList.remove('open');
-      editingId = null;
+      currentId = null;
     }
 
-    function handleOverlayClick(e) {
-      if (e.target === document.getElementById('modalOverlay')) closeModal();
+    // ========== DRAG & DROP ==========
+    function onDragStart(e) {
+      dragId = e.currentTarget.dataset.id;
+      e.currentTarget.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', dragId);
     }
-
-    function selectColor(c) {
-      selectedColor = c;
-      updateColorUI();
+    function onDragEnd(e) {
+      e.currentTarget.classList.remove('dragging');
+      document.querySelectorAll('.column').forEach(c => c.classList.remove('drag-over'));
+      dragId = null;
     }
-
-    function updateColorUI() {
-      document.querySelectorAll('.color-swatch').forEach(el => {
-        el.classList.toggle('selected', el.dataset.color === selectedColor);
-      });
+    function onDragOver(e) {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      e.currentTarget.classList.add('drag-over');
     }
-
-    function renderTags() {
-      const wrap = document.getElementById('tagsWrap');
-      const input = document.getElementById('tagInput');
-      // clear existing tags
-      wrap.querySelectorAll('.tag-item').forEach(t => t.remove());
-      currentTags.forEach(tag => {
-        const span = document.createElement('span');
-        span.className = 'tag-item';
-        span.innerHTML = `${escapeHtml(tag)} <button type="button" onclick="removeTag('${escapeHtml(tag)}')">×</button>`;
-        wrap.insertBefore(span, input);
-      });
+    function onDragLeave(e) {
+      if (!e.currentTarget.contains(e.relatedTarget)) {
+        e.currentTarget.classList.remove('drag-over');
+      }
     }
-
-    function handleTagKey(e) {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        const val = e.target.value.trim().toLowerCase();
-        if (val && !currentTags.includes(val)) {
-          currentTags.push(val);
-          renderTags();
-        }
-        e.target.value = '';
+    function onDrop(e) {
+      e.preventDefault();
+      e.currentTarget.classList.remove('drag-over');
+      const stage = e.currentTarget.dataset.stage;
+      const id = e.dataTransfer.getData('text/plain') || dragId;
+      if (id && stage) {
+        updateIdea(id, { stage });
+        toast(`Moved to ${STAGES.find(s => s.id === stage)?.label || stage}`);
       }
     }
 
-    function removeTag(tag) {
-      currentTags = currentTags.filter(t => t !== tag);
-      renderTags();
-    }
-
-    function renderChecklist() {
-      const container = document.getElementById('checklist');
-      container.innerHTML = currentChecklist.map((item, idx) => `
-        <div class="checklist-item ${item.done ? 'done' : ''}">
-          <input type="checkbox" ${item.done ? 'checked' : ''} onchange="toggleCheck(${idx})">
-          <input type="text" value="${escapeHtml(item.text)}" oninput="updateCheckText(${idx}, this.value)" placeholder="Checklist item">
-          <button class="btn-ghost btn-sm" onclick="removeCheck(${idx})" style="padding:2px 6px">×</button>
-        </div>
-      `).join('');
-    }
-
-    function addChecklistItem() {
-      currentChecklist.push({ id: uid(), text: '', done: false });
-      renderChecklist();
-      // focus last input
-      const inputs = document.querySelectorAll('#checklist input[type="text"]');
-      if (inputs.length) inputs[inputs.length - 1].focus();
-    }
-
-    function toggleCheck(idx) {
-      currentChecklist[idx].done = !currentChecklist[idx].done;
-      renderChecklist();
-    }
-
-    function updateCheckText(idx, val) {
-      currentChecklist[idx].text = val;
-    }
-
-    function removeCheck(idx) {
-      currentChecklist.splice(idx, 1);
-      renderChecklist();
-    }
-
-    function saveIdea() {
-      const title = document.getElementById('ideaTitle').value.trim();
-      if (!title) {
-        showToast('Title is required');
-        document.getElementById('ideaTitle').focus();
-        return;
-      }
-
-      const notes = document.getElementById('ideaNotes').value.trim();
-      const now = new Date().toISOString();
-
-      if (editingId) {
-        const idea = ideas.find(i => i.id === editingId);
-        if (idea) {
-          idea.title = title;
-          idea.notes = notes;
-          idea.color = selectedColor;
-          idea.tags = [...currentTags];
-          idea.checklist = currentChecklist.filter(c => c.text.trim()).map(c => ({ ...c }));
-          idea.updatedAt = now;
-        }
-        showToast('Idea updated');
-      } else {
-        ideas.unshift({
-          id: uid(),
-          title,
-          notes,
-          color: selectedColor,
-          tags: [...currentTags],
-          checklist: currentChecklist.filter(c => c.text.trim()).map(c => ({ ...c })),
-          stage: 'inbox',
-          createdAt: now,
-          updatedAt: now
-        });
-        showToast('Idea created ✨');
-      }
-
-      saveData();
-      closeModal();
-      render();
-    }
-
-    function deleteIdea() {
-      if (!editingId) return;
-      if (!confirm('Delete this idea permanently?')) return;
-      ideas = ideas.filter(i => i.id !== editingId);
-      saveData();
-      closeModal();
-      render();
-      showToast('Idea deleted');
-    }
-
-    // ===== Export =====
-    function toggleExport() {
-      document.getElementById('exportDropdown').classList.toggle('open');
-    }
-
-    document.addEventListener('click', (e) => {
-      const dd = document.getElementById('exportDropdown');
-      if (!dd.contains(e.target)) dd.classList.remove('open');
-    });
-
+    // ========== EXPORT ==========
     function exportJSON() {
-      const data = JSON.stringify({ ideas, exportedAt: new Date().toISOString() }, null, 2);
-      downloadFile(data, 'sparkboard-export.json', 'application/json');
-      showToast('JSON exported');
-      document.getElementById('exportDropdown').classList.remove('open');
+      const data = JSON.stringify({ version: 1, ideas, exportedAt: now() }, null, 2);
+      download('sparkboard-export.json', data, 'application/json');
+      toast('JSON exported');
     }
-
     function exportMarkdown() {
-      let md = `# SparkBoard Export\n\nExported: ${new Date().toLocaleString()}\n\n`;
+      let md = `# SparkBoard Export\n\n_Exported ${formatDate(now())}_\n\n`;
       STAGES.forEach(stage => {
-        const stageIdeas = ideas.filter(i => i.stage === stage.id);
-        md += `## ${stage.emoji} ${stage.label} (${stageIdeas.length})\n\n`;
-        if (stageIdeas.length === 0) {
+        const list = ideas.filter(i => i.stage === stage.id);
+        md += `## ${stage.icon} ${stage.label}\n\n`;
+        if (list.length === 0) {
           md += '_No ideas_\n\n';
           return;
         }
-        stageIdeas.forEach(idea => {
+        list.forEach(idea => {
           md += `### ${idea.title}\n`;
-          md += `- **Color**: ${idea.color}\n`;
-          if (idea.tags && idea.tags.length) md += `- **Tags**: ${idea.tags.join(', ')}\n`;
-          md += `- **Created**: ${formatDate(idea.createdAt)}\n`;
+          md += `- **Color:** ${idea.color}\n`;
+          if (idea.tags.length) md += `- **Tags:** ${idea.tags.join(', ')}\n`;
+          md += `- **Created:** ${formatDate(idea.createdAt)}\n`;
           if (idea.notes) md += `\n${idea.notes}\n`;
-          if (idea.checklist && idea.checklist.length) {
+          if (idea.checklist.length) {
             md += `\n**Checklist:**\n`;
             idea.checklist.forEach(c => {
               md += `- [${c.done ? 'x' : ' '}] ${c.text}\n`;
             });
           }
-          md += '\n---\n\n';
+          md += '\n';
         });
       });
-      downloadFile(md, 'sparkboard-export.md', 'text/markdown');
-      showToast('Markdown exported');
-      document.getElementById('exportDropdown').classList.remove('open');
+      download('sparkboard-export.md', md, 'text/markdown');
+      toast('Markdown exported');
     }
-
-    function downloadFile(content, filename, type) {
-      const blob = new Blob([content], { type });
+    function download(filename, text, mime) {
+      const blob = new Blob([text], { type: mime });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -1061,74 +1089,61 @@
       URL.revokeObjectURL(url);
     }
 
-    // ===== Keyboard =====
-    document.addEventListener('keydown', (e) => {
-      // Quick add: N or Ctrl/Cmd+K when not in input
-      const inInput = ['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName);
-      if ((e.key === 'n' || e.key === 'N') && !inInput && !e.metaKey && !e.ctrlKey && !e.altKey) {
-        e.preventDefault();
-        openModal();
-      }
-      if ((e.key === 'k' || e.key === 'K') && (e.metaKey || e.ctrlKey)) {
-        e.preventDefault();
-        openModal();
-      }
-      // Esc closes modal
-      if (e.key === 'Escape') {
-        closeModal();
-        document.getElementById('exportDropdown').classList.remove('open');
-      }
-      // Ctrl+Enter saves in modal
-      if ((e.metaKey || e.ctrlKey) && e.key === 'Enter' && document.getElementById('modalOverlay').classList.contains('open')) {
-        e.preventDefault();
-        saveIdea();
-      }
+    // ========== EVENTS ==========
+    document.getElementById('newIdeaBtn').onclick = () => createIdea();
+    document.getElementById('exportJsonBtn').onclick = exportJSON;
+    document.getElementById('exportMdBtn').onclick = exportMarkdown;
+    document.getElementById('modalClose').onclick = closeModal;
+    document.getElementById('saveBtn').onclick = saveModal;
+    document.getElementById('deleteBtn').onclick = () => currentId && deleteIdea(currentId);
+    document.getElementById('addCheckBtn').onclick = () => {
+      const list = getModalChecklist();
+      list.push({ id: uid(), text: '', done: false });
+      renderChecklist(list);
+      // focus last
+      const inputs = document.querySelectorAll('#checklist input[type="text"]');
+      if (inputs.length) inputs[inputs.length - 1].focus();
+    };
+    document.getElementById('modalOverlay').addEventListener('click', (e) => {
+      if (e.target === document.getElementById('modalOverlay')) closeModal();
     });
-
-    // Search live
     document.getElementById('searchInput').addEventListener('input', (e) => {
       searchQuery = e.target.value.trim();
-      render();
+      renderBoard();
     });
 
-    // ===== Init =====
-    loadData();
-    render();
+    // Keyboard
+    document.addEventListener('keydown', (e) => {
+      const tag = e.target.tagName;
+      const isInput = tag === 'INPUT' || tag === 'TEXTAREA';
 
-    // Seed example if empty (first run delight)
-    if (ideas.length === 0) {
-      const now = new Date().toISOString();
-      ideas = [
-        {
-          id: uid(),
-          title: 'Welcome to SparkBoard ✨',
-          notes: 'This is your idea board. Create cards, drag them across stages, add tags, colors, notes and checklists.\n\nPress N or Ctrl+K anytime to add a new idea.\n\nEverything is saved locally in your browser.',
-          color: 'yellow',
-          tags: ['welcome', 'tips'],
-          checklist: [
-            { id: uid(), text: 'Create your first real idea', done: false },
-            { id: uid(), text: 'Drag this card to Exploring', done: false },
-            { id: uid(), text: 'Try exporting to Markdown', done: false }
-          ],
-          stage: 'inbox',
-          createdAt: now,
-          updatedAt: now
-        },
-        {
-          id: uid(),
-          title: 'Build something people love',
-          notes: 'Focus on delight and clarity.',
-          color: 'purple',
-          tags: ['product'],
-          checklist: [],
-          stage: 'exploring',
-          createdAt: now,
-          updatedAt: now
-        }
-      ];
-      saveData();
-      render();
-    }
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        createIdea();
+        return;
+      }
+      if (!isInput && (e.key === 'n' || e.key === 'N')) {
+        e.preventDefault();
+        createIdea();
+        return;
+      }
+      if (e.key === 'Escape') {
+        closeModal();
+      }
+      if (e.key === 'Enter' && e.target.id === 'modalTitle' && (e.metaKey || e.ctrlKey)) {
+        saveModal();
+      }
+    });
+
+    // ========== INIT ==========
+    load();
+    renderColorFilters();
+    renderBoard();
+
+    // Expose for empty state button
+    window.createIdea = createIdea;
+    window.openModal = openModal;
+    window.deleteIdea = deleteIdea;
   </script>
 </body>
 </html>
